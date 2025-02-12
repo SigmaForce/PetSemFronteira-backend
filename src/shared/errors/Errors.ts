@@ -43,3 +43,16 @@ export class MethodNotAllowedError extends Error {
     };
   }
 }
+
+export class BadRequestError extends Error {
+  readonly action;
+  readonly statusCode;
+  readonly cause;
+  constructor({ cause }: ErrorOptions) {
+    super("Requisição inválida.");
+    this.name = "BadRequestError";
+    this.action = "Verifique os dados enviados";
+    this.statusCode = 400;
+    this.cause = cause;
+  }
+}
