@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "dev": "npx nodemon src/main.ts"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +17,7 @@
   },
   "dependencies": {
     "@types/express": "^5.0.0",
+    "axios": "^1.7.9",
     "express": "^4.21.2",
     "pg-promise": "^11.10.2"
   }
