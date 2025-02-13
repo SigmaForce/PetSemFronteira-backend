@@ -21,6 +21,7 @@ export default class CreateAnimal {
         user_id: input.user_id,
       };
       const animalId = await this.animalRepository.create(animal);
+
       if (animalId) return { animalId };
     } catch (err) {
       throw new InternalServerError({ cause: err });

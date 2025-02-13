@@ -31,12 +31,14 @@ export default class AnimalRepositoryDatabase implements AnimalRepository {
     }
   }
 
-  async find(id: number): Promise<Animal | Boolean> {
+  async find(id: number): Promise<Animal | undefined> {
     try {
       const [animal] = await this.databaseConnection.query(
         'SELECT * FROM "Animal" WHERE id = $1',
         [id]
       );
+
+      if (!animal) return;
 
       return {
         animalId: +animal.id,
