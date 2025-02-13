@@ -1,26 +1,42 @@
 import express, { Request, Response } from "express";
+import { ZodError } from "zod";
 import CreateAnimal from "./application/usecase/CreateAnimal";
 import { pgPromiseAdapter } from "./infra/database/config/DatabaseConnection";
 import AnimalRepositoryDatabase from "./infra/database/repository/AnimalRepositoryDatabase";
+import { createAnimalSchema } from "./infra/http/schemas/AnimalSchema";
+import { BadRequestError } from "./shared/errors/Errors";
 
 async function main() {
   const app = express();
   app.use(express.json());
   app.post("/animal", async (req: Request, res: Response) => {
     try {
+      let input;
+      try {
+        input = createAnimalSchema.parse(req.body);
+      } catch (err) {
+        if (err instanceof ZodError) {
+          throw new BadRequestError({ cause: err });
+        }
+        throw err;
+      }
+
       const databaseConnection = new pgPromiseAdapter();
       const animalRepository = new AnimalRepositoryDatabase(databaseConnection);
       const createAnimal = new CreateAnimal(animalRepository);
-      const input = req.body;
       const animalId = await createAnimal.execute(input);
 
       res.status(201).json({
         animalId: animalId?.animalId,
       });
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      const publicError = err;
-      res.status(500).json({});
+      res.status(err.statusCode).json({
+        name: err.name,
+        message: err.message,
+        action: err.action,
+        status: err.statusCode,
+      });
     }
   });
 
