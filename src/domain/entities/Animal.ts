@@ -3,13 +3,14 @@ export default class Animal {
     readonly animalId: number,
     readonly name: string,
     readonly species: string,
-    readonly breed: string,
+    readonly gender: string,
     readonly age: number,
     readonly size: string,
     readonly status: string,
     readonly description: string,
-    readonly image_url: string,
-    readonly location: string,
-    readonly user_id: number
+    readonly user_id: number,
+    readonly breed?: string,
+    readonly image_url?: string,
+    readonly location?: string
   ) {}
 }
