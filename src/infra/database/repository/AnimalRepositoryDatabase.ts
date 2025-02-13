@@ -1,6 +1,6 @@
 import Animal from "../../../domain/entities/Animal";
 import AnimalRepository from "../../../domain/repository/Animal/AnimalRepository";
-import { BadRequestError } from "../../../shared/errors/Errors";
+import { InternalServerError } from "../../../shared/errors/Errors";
 import DatabaseConnection from "../config/DatabaseConnection";
 
 export default class AnimalRepositoryDatabase implements AnimalRepository {
@@ -9,11 +9,12 @@ export default class AnimalRepositoryDatabase implements AnimalRepository {
   async create(animal: Animal): Promise<number | undefined> {
     try {
       const [res] = await this.databaseConnection.query(
-        'INSERT INTO "Animal" (id, name, species, breed, age, size, status, description, image_url, location, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id',
+        'INSERT INTO "Animal" (id, name, species, gender, breed, age, size, status, description, image_url, location, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id',
         [
           animal.animalId,
           animal.name,
           animal.species,
+          animal.gender,
           animal.breed,
           animal.age,
           animal.size,
@@ -26,7 +27,7 @@ export default class AnimalRepositoryDatabase implements AnimalRepository {
       );
       return res.id;
     } catch (error: unknown) {
-      throw new BadRequestError({ cause: error });
+      throw new InternalServerError({ cause: error });
     }
   }
 
@@ -41,6 +42,7 @@ export default class AnimalRepositoryDatabase implements AnimalRepository {
         animalId: +animal.id,
         name: animal.name,
         species: animal.species,
+        gender: animal.gender,
         breed: animal.breed,
         age: +animal.age,
         size: animal.size,
@@ -48,10 +50,10 @@ export default class AnimalRepositoryDatabase implements AnimalRepository {
         description: animal.description,
         image_url: animal.image_url,
         location: animal.location,
-        user_id: animal.user_id,
+        user_id: +animal.user_id,
       };
     } catch (error) {
-      return false;
+      throw new InternalServerError({ cause: error });
     }
   }
 
@@ -62,7 +64,7 @@ export default class AnimalRepositoryDatabase implements AnimalRepository {
         [id]
       );
     } catch (error) {
-      throw new Error("Error to delete a animal");
+      throw new InternalServerError({ cause: error });
     }
   }
 }
