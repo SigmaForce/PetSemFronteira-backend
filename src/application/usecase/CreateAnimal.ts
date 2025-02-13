@@ -1,5 +1,5 @@
 import AnimalRepository from "../../domain/repository/Animal/AnimalRepository";
-import { BadRequestError } from "../../shared/errors/Errors";
+import { InternalServerError } from "../../shared/errors/Errors";
 
 export default class CreateAnimal {
   constructor(readonly animalRepository: AnimalRepository) {}
@@ -10,6 +10,7 @@ export default class CreateAnimal {
         animalId: Math.random() * 100000,
         name: input.name,
         species: input.species,
+        gender: input.gender,
         breed: input.breed,
         age: input.age,
         size: input.size,
@@ -22,7 +23,7 @@ export default class CreateAnimal {
       const animalId = await this.animalRepository.create(animal);
       if (animalId) return { animalId };
     } catch (err) {
-      throw new BadRequestError({ cause: err });
+      throw new InternalServerError({ cause: err });
     }
   }
 }
@@ -30,13 +31,14 @@ export default class CreateAnimal {
 type Input = {
   name: string;
   species: string;
-  breed: string;
+  gender: string;
+  breed?: string;
   age: number;
   size: string;
   status: string;
   description: string;
-  image_url: string;
-  location: string;
+  image_url?: string;
+  location?: string;
   user_id: number;
 };
 
