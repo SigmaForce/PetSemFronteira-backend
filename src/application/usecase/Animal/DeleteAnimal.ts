@@ -1,9 +1,9 @@
-import AnimalRepository from "../../domain/repository/Animal/AnimalRepository";
+import AnimalRepository from "../../../domain/repository/Animal/AnimalRepository";
 
 export default class DeleteAnimal {
   constructor(readonly animalRepository: AnimalRepository) {}
 
-  async execute(id: number): Promise<void> {
+  async execute(id: string): Promise<void> {
     await this.animalRepository.delete(id);
   }
 }

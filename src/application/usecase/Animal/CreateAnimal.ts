@@ -1,5 +1,5 @@
-import AnimalRepository from "../../domain/repository/Animal/AnimalRepository";
-import { InternalServerError } from "../../shared/errors/Errors";
+import AnimalRepository from "../../../domain/repository/Animal/AnimalRepository";
+import { InternalServerError } from "../../../shared/errors/Errors";
 
 export default class CreateAnimal {
   constructor(readonly animalRepository: AnimalRepository) {}

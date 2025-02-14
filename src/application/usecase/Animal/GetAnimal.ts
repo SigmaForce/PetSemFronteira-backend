@@ -1,5 +1,5 @@
-import Animal from "../../domain/entities/Animal";
-import AnimalRepository from "../../domain/repository/Animal/AnimalRepository";
+import Animal from "../../../domain/entities/Animal";
+import AnimalRepository from "../../../domain/repository/Animal/AnimalRepository";
 
 export default class GetAnimal {
   constructor(readonly animalRepository: AnimalRepository) {}
