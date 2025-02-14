@@ -1,11 +1,17 @@
 -- Usuários (ONGs e usuários comuns)
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name VARCHAR(100) NOT NULL,
+    nick_name VARCHAR(50) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    birthdate Date NOT NULL,
     password_hash TEXT NOT NULL,
     phone VARCHAR(20),
-    role VARCHAR(10) CHECK (role IN ('USER', 'ONG', "ADMIN")) NOT NULL,
+    role VARCHAR(10) CHECK (role IN ('USER', 'ONG', 'ADMIN')) NOT NULL,
+    status BOOLEAN DEFAULT FALSE,
+    description TEXT,
+    image_url TEXT,
     created_at TIMESTAMP DEFAULT NOW()
 );
 
