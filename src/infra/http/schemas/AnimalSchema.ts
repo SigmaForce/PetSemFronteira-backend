@@ -11,5 +11,5 @@ export const createAnimalSchema = z.object({
   description: z.string().min(1, "Description need to be defined"),
   image_url: z.string().optional(),
   location: z.string().optional(),
-  user_id: z.number().min(1, "User_id need to be defined"),
+  user_id: z.string().min(1, "User_id need to be defined"),
 });

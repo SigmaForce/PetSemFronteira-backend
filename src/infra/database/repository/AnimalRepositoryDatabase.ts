@@ -6,12 +6,11 @@ import DatabaseConnection from "../config/DatabaseConnection";
 export default class AnimalRepositoryDatabase implements AnimalRepository {
   constructor(readonly databaseConnection: DatabaseConnection) {}
 
-  async create(animal: Animal): Promise<number | undefined> {
+  async create(animal: Animal): Promise<string | undefined> {
     try {
       const [res] = await this.databaseConnection.query(
-        'INSERT INTO "Animal" (id, name, species, gender, breed, age, size, status, description, image_url, location, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id',
+        'INSERT INTO "animals" (name, species, gender, breed, age, size, status, description, image_url, location, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id',
         [
-          animal.animalId,
           animal.name,
           animal.species,
           animal.gender,
@@ -31,17 +30,17 @@ export default class AnimalRepositoryDatabase implements AnimalRepository {
     }
   }
 
-  async find(id: number): Promise<Animal | undefined> {
+  async find(id: string): Promise<Animal | undefined> {
     try {
       const [animal] = await this.databaseConnection.query(
-        'SELECT * FROM "Animal" WHERE id = $1',
+        'SELECT * FROM "animals" WHERE id = $1',
         [id]
       );
 
       if (!animal) return;
 
       return {
-        animalId: +animal.id,
+        animalId: animal.id,
         name: animal.name,
         species: animal.species,
         gender: animal.gender,
@@ -52,17 +51,17 @@ export default class AnimalRepositoryDatabase implements AnimalRepository {
         description: animal.description,
         image_url: animal.image_url,
         location: animal.location,
-        user_id: +animal.user_id,
+        user_id: animal.user_id,
       };
     } catch (error) {
       throw new InternalServerError({ cause: error });
     }
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     try {
       await this.databaseConnection.query(
-        'DELETE FROM "Animal" WHERE id = $1',
+        'DELETE FROM "animals" WHERE id = $1',
         [id]
       );
     } catch (error) {

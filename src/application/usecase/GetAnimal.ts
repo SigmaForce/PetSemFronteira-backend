@@ -4,7 +4,7 @@ import AnimalRepository from "../../domain/repository/Animal/AnimalRepository";
 export default class GetAnimal {
   constructor(readonly animalRepository: AnimalRepository) {}
 
-  async execute(id: number): Promise<Animal | undefined> {
+  async execute(id: string): Promise<Animal | undefined> {
     const animal = await this.animalRepository.find(id);
     return animal;
   }

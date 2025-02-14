@@ -7,7 +7,6 @@ export default class CreateAnimal {
   async execute(input: Input): Promise<Output | undefined> {
     try {
       const animal = {
-        animalId: Math.random() * 100000,
         name: input.name,
         species: input.species,
         gender: input.gender,
@@ -40,9 +39,9 @@ type Input = {
   description: string;
   image_url?: string;
   location?: string;
-  user_id: number;
+  user_id: string;
 };
 
 type Output = {
-  animalId: number;
+  animalId: string;
 };
