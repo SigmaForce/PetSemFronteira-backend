@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { z, ZodError } from "zod";
-import CreateAnimal from "../../../application/usecase/CreateAnimal";
+import CreateAnimal from "../../../application/usecase/Animal/CreateAnimal";
 import { BadRequestError } from "../../../shared/errors/Errors";
 import { pgPromiseAdapter } from "../../database/config/DatabaseConnection";
 import AnimalRepositoryDatabase from "../../database/repository/AnimalRepositoryDatabase";
