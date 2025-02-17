@@ -1,5 +1,6 @@
 interface ErrorOptions {
-  cause: unknown;
+  cause?: unknown;
+  message?: string;
 }
 
 export class InternalServerError extends Error {
@@ -48,8 +49,8 @@ export class BadRequestError extends Error {
   readonly action;
   readonly statusCode;
   readonly cause;
-  constructor({ cause }: ErrorOptions) {
-    super("Requisição inválida.");
+  constructor({ cause, message }: ErrorOptions) {
+    super(message || "Requisição inválida");
     this.name = "BadRequestError";
     this.action = "Verifique os dados enviados";
     this.statusCode = 400;
