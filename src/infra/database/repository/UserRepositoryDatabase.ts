@@ -48,6 +48,7 @@ export default class UserRepositoryDatabase implements UserRepository {
         password: user.password_hash,
         phone: user.phone,
         role: user.role,
+        status: user.status,
         description: user.description,
         image_url: user.image_url,
       };
@@ -56,12 +57,39 @@ export default class UserRepositoryDatabase implements UserRepository {
     }
   }
 
-  async delete(email: string): Promise<void> {
+  async findById(id: string): Promise<User | undefined> {
     try {
-      await this.databaseConnection.query(
-        'DELETE FROM "users" WHERE email = $1',
-        [email]
+      const [user] = await this.databaseConnection.query(
+        'SELECT * FROM "users" WHERE id = $1',
+        [id]
       );
+
+      if (!user) return;
+
+      return {
+        userId: user.id,
+        nickName: user.nick_name,
+        email: user.email,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        birthDate: user.birthdate,
+        password: user.password_hash,
+        phone: user.phone,
+        role: user.role,
+        status: user.status,
+        description: user.description,
+        image_url: user.image_url,
+      };
+    } catch (error) {
+      throw new InternalServerError({ cause: error });
+    }
+  }
+
+  async delete(id: string): Promise<void> {
+    try {
+      await this.databaseConnection.query('DELETE FROM "users" WHERE id = $1', [
+        id,
+      ]);
     } catch (error) {
       throw new InternalServerError({ cause: error });
     }
