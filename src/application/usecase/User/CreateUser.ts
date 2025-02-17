@@ -1,10 +1,24 @@
 import UserRepository from "../../../domain/repository/User/UserRepository";
-import { InternalServerError } from "../../../shared/errors/Errors";
+import {
+  BadRequestError,
+  InternalServerError,
+} from "../../../shared/errors/Errors";
 
 export default class CreateUser {
   constructor(readonly userRepository: UserRepository) {}
 
   async execute(input: Input): Promise<Output | undefined> {
+    try {
+      const hasUser = await this.userRepository.findByEmail(input.email);
+
+      if (hasUser)
+        throw new Error("Already have user with this e-mail address");
+    } catch (err) {
+      throw new BadRequestError({
+        cause: err,
+        message: "E-mail already exists",
+      });
+    }
     try {
       const user = {
         nickName: input.nickName,
@@ -20,14 +34,7 @@ export default class CreateUser {
         image_url: input.image_url,
         userId: input.userId,
       };
-
-      const hasUser = await this.userRepository.findByEmail(user.email);
-
-      if (hasUser)
-        return { userId: hasUser?.userId, message: "User already exists" };
-
       const userId = await this.userRepository.create(user);
-
       if (userId) return { userId: userId, message: "User created" };
     } catch (err) {
       throw new InternalServerError({ cause: err });
