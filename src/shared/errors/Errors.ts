@@ -62,7 +62,7 @@ export class InvalidCredentialsError extends Error {
   readonly action;
   readonly statusCode;
   constructor() {
-    super("Crendencias Invalidas");
+    super("Crendenciais Invalidas");
     this.name = "InvalidCredentialsError";
     this.action = "Verifique os dados e tente novamente.";
     this.statusCode = 401;
