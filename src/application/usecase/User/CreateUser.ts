@@ -3,6 +3,7 @@ import {
   BadRequestError,
   InternalServerError,
 } from "../../../shared/errors/Errors";
+import { hashPassword } from "../../../shared/utils/hash";
 
 export default class CreateUser {
   constructor(readonly userRepository: UserRepository) {}
@@ -20,13 +21,15 @@ export default class CreateUser {
       });
     }
     try {
+      const hash = await hashPassword(input.password);
+
       const user = {
         nickName: input.nickName,
         email: input.email,
         firstName: input.firstName,
         lastName: input.lastName,
         birthDate: new Date(input.birthDate),
-        password: input.password,
+        password: hash,
         phone: input.phone,
         role: input.role,
         status: input.status,
