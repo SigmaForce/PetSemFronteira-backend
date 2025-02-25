@@ -42,9 +42,14 @@ test("should create animal when request in /animal", async () => {
 });
 
 test("should return 400 when request body is invalid or empty", async () => {
-  try {
-    await axios.post("http://localhost:3000/animal");
-  } catch (error: any) {
-    expect(error.response.status).toBe(400);
-  }
+  const response = await axios.post(
+    "http://localhost:3000/animal",
+    {},
+    {
+      validateStatus: () => true,
+    }
+  );
+
+  expect(response.status).toBe(400);
+  expect(response.data.name).toBe("BadRequestError");
 });

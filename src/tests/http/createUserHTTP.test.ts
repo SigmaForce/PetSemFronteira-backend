@@ -17,17 +17,19 @@ describe("User HTTP", () => {
       status: false,
     };
 
-    const responseUser = await axios.post("http://localhost:3000/user", input);
+    const responseUser = await axios.post("http://localhost:3000/user", input, {
+      validateStatus: () => true,
+    });
     const outputCheckout = responseUser.data;
 
     expect(outputCheckout.userId).toBeDefined();
     userIds.push(outputCheckout.userId);
 
-    try {
-      const fetchUser = await axios.post("http://localhost:3000/user", input);
-    } catch (err: any) {
-      expect(err.status).toBe(400);
-    }
+    const fetchUser = await axios.post("http://localhost:3000/user", input, {
+      validateStatus: () => true,
+    });
+
+    expect(fetchUser.status).toBe(400);
   });
 
   test("should return user when requests /user/:id", async () => {
@@ -40,7 +42,6 @@ describe("User HTTP", () => {
       firstName: "John",
       lastName: "Doe",
       birthDate: "1998-11-08T03:00:00.000Z",
-      password: "123456",
       phone: "11556699884",
       role: "USER",
       status: false,
