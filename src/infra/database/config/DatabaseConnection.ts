@@ -1,4 +1,6 @@
 import pgp from "pg-promise";
+import { InternalServerError } from "../../../shared/errors/Errors";
+import { env } from "../../../shared/utils/env";
 
 export default interface DatabaseConnection {
   query(statement: string, params: any): Promise<any>;
@@ -8,7 +10,11 @@ export default interface DatabaseConnection {
 export class pgPromiseAdapter implements DatabaseConnection {
   connection: any;
   constructor() {
-    this.connection = pgp()("");
+    try {
+      this.connection = pgp()(env.DB_CONNECTION);
+    } catch (e) {
+      throw new InternalServerError({ cause: e });
+    }
   }
 
   query(statement: string, params: any): Promise<any> {
