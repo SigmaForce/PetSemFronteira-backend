@@ -57,3 +57,23 @@ export class BadRequestError extends Error {
     this.cause = cause;
   }
 }
+
+export class InvalidCredentialsError extends Error {
+  readonly action;
+  readonly statusCode;
+  constructor() {
+    super("Crendencias Invalidas");
+    this.name = "InvalidCredentialsError";
+    this.action = "Verifique os dados e tente novamente.";
+    this.statusCode = 401;
+  }
+
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      action: this.action,
+      status_code: this.statusCode,
+    };
+  }
+}
