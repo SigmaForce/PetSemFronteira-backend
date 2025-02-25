@@ -1,6 +1,6 @@
-import { compare } from "bcryptjs";
 import UserRepository from "../../../domain/repository/User/UserRepository";
 import { InvalidCredentialsError } from "../../../shared/errors/Errors";
+import { verifyHash } from "../../../shared/utils/hash";
 import { encrypt } from "../../../shared/utils/jwt";
 
 export default class AuthenticateUser {
@@ -13,7 +13,7 @@ export default class AuthenticateUser {
       throw new InvalidCredentialsError();
     }
 
-    const passwordMatch = await compare(password, user.password);
+    const passwordMatch = await verifyHash(password, user.password);
 
     if (!passwordMatch) {
       throw new InvalidCredentialsError();
