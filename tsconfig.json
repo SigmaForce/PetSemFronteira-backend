@@ -1,11 +1,15 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "_version": "22.0.0",
+
   "compilerOptions": {
-    "target": "es2016",
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
+    "lib": ["es2023"],
+    "module": "node16",
+    "target": "es2022",
+
     "strict": true,
-    "skipLibCheck": true
-  },
-  "include": ["src/**/*.ts"]
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node16"
+  }
 }
