@@ -37,7 +37,7 @@ describe("UserRepositoryDatabase", () => {
     databaseConnection.close();
   });
 
-  test("shoud return user by id", async () => {
+  test("should return user by id", async () => {
     const databaseConnection = new pgPromiseAdapter();
     const userRepository = new UserRepositoryDatabase(databaseConnection);
     const findByID = new GetUserById(userRepository);
