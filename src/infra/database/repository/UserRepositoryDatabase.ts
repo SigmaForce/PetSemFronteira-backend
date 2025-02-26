@@ -94,4 +94,24 @@ export default class UserRepositoryDatabase implements UserRepository {
       throw new InternalServerError({ cause: error });
     }
   }
+
+  async update(user: User): Promise<void> {
+    const [res] = await this.databaseConnection.query(
+      'UPDATE "users" SET nick_name = $1, email = $2, first_name = $3, last_name = $4, password_hash = $5, birthdate = $6, phone = $7, role = $8, status = $9, description = $10, image_url = $11 WHERE id = $12',
+      [
+        user.nickName,
+        user.email,
+        user.firstName,
+        user.lastName,
+        user.password,
+        user.birthDate,
+        user.phone,
+        user.role,
+        user.status,
+        user.description,
+        user.image_url,
+        user.userId,
+      ]
+    );
+  }
 }
