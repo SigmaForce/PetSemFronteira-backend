@@ -11,6 +11,8 @@ const paramSchema = z.object({
 });
 
 export const createAnimal = async (req: Request, res: Response) => {
+  const databaseConnection = new pgPromiseAdapter();
+  const animalRepository = new AnimalRepositoryDatabase(databaseConnection);
   try {
     let input;
     try {
@@ -22,15 +24,12 @@ export const createAnimal = async (req: Request, res: Response) => {
       throw err;
     }
 
-    const databaseConnection = new pgPromiseAdapter();
-    const animalRepository = new AnimalRepositoryDatabase(databaseConnection);
     const createAnimal = new CreateAnimal(animalRepository);
     const animalId = await createAnimal.execute(input);
 
     res.status(201).json({
       animalId: animalId?.animalId,
     });
-    databaseConnection.close();
   } catch (err: any) {
     console.error(err);
     res.status(err.statusCode).json({
@@ -39,10 +38,14 @@ export const createAnimal = async (req: Request, res: Response) => {
       action: err.action,
       status: err.statusCode,
     });
+  } finally {
+    databaseConnection.close();
   }
 };
 
 export const getAnimal = async (req: Request, res: Response) => {
+  const databaseConnection = new pgPromiseAdapter();
+  const animalRepository = new AnimalRepositoryDatabase(databaseConnection);
   try {
     let input;
     try {
@@ -53,15 +56,9 @@ export const getAnimal = async (req: Request, res: Response) => {
       }
       throw err;
     }
-
-    const databaseConnection = new pgPromiseAdapter();
-    const animalRepository = new AnimalRepositoryDatabase(databaseConnection);
     const animal = await animalRepository.find(input.id);
-
     if (!animal) res.status(204).json(animal);
-
     if (animal) res.status(200).json(animal);
-    databaseConnection.close();
   } catch (err: any) {
     console.error(err);
     res.status(err.statusCode).json({
@@ -70,10 +67,14 @@ export const getAnimal = async (req: Request, res: Response) => {
       action: err.action,
       status: err.statusCode,
     });
+  } finally {
+    databaseConnection.close();
   }
 };
 
 export const deleteAnimal = async (req: Request, res: Response) => {
+  const databaseConnection = new pgPromiseAdapter();
+  const animalRepository = new AnimalRepositoryDatabase(databaseConnection);
   try {
     let input;
     try {
@@ -84,10 +85,7 @@ export const deleteAnimal = async (req: Request, res: Response) => {
       }
       throw err;
     }
-    const databaseConnection = new pgPromiseAdapter();
-    const animalRepository = new AnimalRepositoryDatabase(databaseConnection);
     await animalRepository.delete(input.id);
-    databaseConnection.close();
     res.status(204).send();
   } catch (err: any) {
     console.error(err);
@@ -97,5 +95,7 @@ export const deleteAnimal = async (req: Request, res: Response) => {
       action: err.action,
       status: err.statusCode,
     });
+  } finally {
+    databaseConnection.close();
   }
 };
