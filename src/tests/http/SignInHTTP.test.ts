@@ -2,23 +2,23 @@ import axios from "axios";
 import { describe, expect, test } from "vitest";
 
 describe("HTTP userSignIn", () => {
-  describe("User fetch /users/signIn", () => {
+  describe("User fetch /user/signIn", () => {
     test("should return token when fetch with correct credentials ", async () => {
       const input = {
-        email: "J.doe@example.com",
-        password: "123456",
+        email: "leonardolucas@example.com",
+        password: "548798",
       };
-      try {
-        const result = await axios.post(
-          `http://localhost:3000/user/signIn`,
-          input
-        );
 
-        expect(result.status).toBe(200);
-        expect(result.data.token).toBeDefined();
-      } catch (error) {
-        console.log(error);
-      }
+      const result = await axios.post(
+        `http://localhost:3000/user/signIn`,
+        input,
+        {
+          validateStatus: () => true,
+        }
+      );
+
+      expect(result.status).toBe(200);
+      expect(result.data.token).toBeDefined();
     });
 
     test("should return invalidCredentials when fetch with invalid user", async () => {
