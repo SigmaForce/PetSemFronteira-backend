@@ -1,5 +1,8 @@
 import UserRepository from "../../../domain/repository/User/UserRepository";
-import { InvalidCredentialsError } from "../../../shared/errors/Errors";
+import {
+  ForbiddenError,
+  InvalidCredentialsError,
+} from "../../../shared/errors/Errors";
 import { createHash, verifyHash } from "../../../shared/utils/hash";
 
 export default class ChangePassword {
@@ -13,9 +16,8 @@ export default class ChangePassword {
     }
 
     const passwordMatch = await verifyHash(oldPassword, user.password);
-    console.log(passwordMatch);
     if (!passwordMatch) {
-      throw new InvalidCredentialsError();
+      throw new ForbiddenError({ message: "oldPassword does not match" });
     }
 
     const newPasswordHash = await createHash(newPassword);

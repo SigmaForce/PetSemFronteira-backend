@@ -56,6 +56,15 @@ export class BadRequestError extends Error {
     this.statusCode = 400;
     this.cause = cause;
   }
+
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      action: this.action,
+      status_code: this.statusCode,
+    };
+  }
 }
 
 export class InvalidCredentialsError extends Error {
@@ -66,6 +75,28 @@ export class InvalidCredentialsError extends Error {
     this.name = "InvalidCredentialsError";
     this.action = "Verifique os dados e tente novamente.";
     this.statusCode = 401;
+  }
+
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      action: this.action,
+      status_code: this.statusCode,
+    };
+  }
+}
+
+export class ForbiddenError extends Error {
+  readonly action;
+  readonly statusCode;
+  readonly cause;
+  constructor({ cause, message }: ErrorOptions) {
+    super(message || "Forbidden");
+    this.name = "Forbidden";
+    this.action = "Verifique os dados enviados";
+    this.statusCode = 403;
+    this.cause = cause;
   }
 
   toJSON() {
