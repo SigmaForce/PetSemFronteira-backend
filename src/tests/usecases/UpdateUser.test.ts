@@ -32,8 +32,6 @@ describe("should update user if exists", () => {
       id: "ac34333a-25cb-461f-90bd-32fef7e02a20",
     });
 
-    console.log(user);
-
     expect(user?.nickName).toMatch("mauricio");
     expect(user?.role).toBe("ADMIN");
     databaseConnection.close();
@@ -61,6 +59,8 @@ describe("should update user if exists", () => {
     } catch (err: any) {
       expect(err.name).toBe("InvalidCredentialsError");
       expect(err.statusCode).toBe(401);
+    } finally {
+      databaseConnection.close();
     }
   });
 
@@ -76,7 +76,7 @@ describe("should update user if exists", () => {
         newPassword: "123456",
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
 
     const result = await authenticateUser.execute({
@@ -85,5 +85,6 @@ describe("should update user if exists", () => {
     });
 
     expect(result.token).toBeDefined();
+    databaseConnection.close();
   });
 });
