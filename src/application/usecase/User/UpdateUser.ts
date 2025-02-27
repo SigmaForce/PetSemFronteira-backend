@@ -24,7 +24,7 @@ export class UpdateUser {
 
 type Input = {
   userId: string;
-  nickname?: string;
+  nickName?: string;
   firstName?: string;
   lastName?: string;
   email?: string;
