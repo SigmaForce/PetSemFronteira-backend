@@ -16,7 +16,7 @@ describe("should authenticate", () => {
       try {
         await authenticateUser.execute(input);
       } catch (err: any) {
-        expect(err.message).toBe("Crendenciais Invalidas");
+        expect(err.message).toBe("Credenciais Invalidas");
         expect(err.statusCode).toBe(401);
         expect(err.name).toBe("InvalidCredentialsError");
       } finally {
