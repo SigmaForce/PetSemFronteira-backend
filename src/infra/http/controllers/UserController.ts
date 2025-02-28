@@ -3,6 +3,7 @@ import { z, ZodError } from "zod";
 import AuthenticateUser from "../../../application/usecase/User/AuthenticateUser";
 import ChangePassword from "../../../application/usecase/User/ChangePassword";
 import CreateUser from "../../../application/usecase/User/CreateUser";
+import ListUsers from "../../../application/usecase/User/ListUsers";
 import { UpdateUser } from "../../../application/usecase/User/UpdateUser";
 import { BadRequestError } from "../../../shared/errors/Errors";
 import { isEmpty } from "../../../shared/utils/IsEmpty";
@@ -216,6 +217,26 @@ export const updateUser = async (req: Request, res: Response) => {
     await updateUser.execute(userData);
 
     res.status(204).send();
+  } catch (err: any) {
+    console.error(err);
+    res.status(err.statusCode || 500).json({
+      name: err.name,
+      message: err.message,
+      action: err.action,
+      status: err.statusCode,
+    });
+  } finally {
+    databaseConnection.close();
+  }
+};
+
+export const listUsers = async (req: Request, res: Response) => {
+  const databaseConnection = new pgPromiseAdapter();
+  const userRepository = new UserRepositoryDatabase(databaseConnection);
+  try {
+    const listUsers = new ListUsers(userRepository);
+    const users = await listUsers.execute();
+    res.status(200).json(users);
   } catch (err: any) {
     console.error(err);
     res.status(err.statusCode || 500).json({
