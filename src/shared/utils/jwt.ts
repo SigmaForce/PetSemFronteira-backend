@@ -1,3 +1,4 @@
+import { InternalServerError, InvalidCredentialsError } from "../errors/Errors";
 import { env } from "./env";
 
 const secretKey = new TextEncoder().encode(env.JWT_SECRET);
@@ -20,9 +21,22 @@ export const encrypt = async (payload: encryptProps) => {
 };
 
 export const decrypt = async (value: string) => {
-  const { jwtVerify } = await import("jose");
-  const { payload } = await jwtVerify(value, secretKey, {
-    algorithms: ["HS256"],
-  });
-  return payload;
+  try {
+    const { jwtVerify, errors } = await import("jose");
+    const { payload } = await jwtVerify(value, secretKey, {
+      algorithms: ["HS256"],
+    });
+    return payload;
+  } catch (err: any) {
+    console.error("Erro ao decodificar token:", err);
+
+    if (err.code === "ERR_JWS_INVALID") {
+      throw new InvalidCredentialsError({
+        message: "Invalid token.",
+        cause: err,
+      });
+    }
+
+    throw new InternalServerError({ cause: err });
+  }
 };
