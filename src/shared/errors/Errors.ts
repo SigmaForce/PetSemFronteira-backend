@@ -70,11 +70,12 @@ export class BadRequestError extends Error {
 export class InvalidCredentialsError extends Error {
   readonly action;
   readonly statusCode;
-  constructor() {
-    super("Crendenciais Invalidas");
+  constructor({ cause, message }: ErrorOptions) {
+    super(message || "Crendenciais Invalidas");
     this.name = "InvalidCredentialsError";
     this.action = "Verifique os dados e tente novamente.";
     this.statusCode = 401;
+    this.cause = cause;
   }
 
   toJSON() {

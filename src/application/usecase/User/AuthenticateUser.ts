@@ -10,13 +10,13 @@ export default class AuthenticateUser {
     const user = await this.userRepository.findByEmail(email);
 
     if (!user) {
-      throw new InvalidCredentialsError();
+      throw new InvalidCredentialsError({ message: "User not found" });
     }
 
     const passwordMatch = await verifyHash(password, user.password);
 
     if (!passwordMatch) {
-      throw new InvalidCredentialsError();
+      throw new InvalidCredentialsError({ message: "Credenciais Invalidas" });
     }
 
     const tokenPayload = {

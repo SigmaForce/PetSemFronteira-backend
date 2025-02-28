@@ -9,7 +9,7 @@ export class UpdateUser {
     const user = await this.userRepository.findById(userData.userId);
 
     if (!user) {
-      throw new InvalidCredentialsError();
+      throw new InvalidCredentialsError({ message: "User Not Found" });
     }
 
     if (userData.password != undefined) {
