@@ -37,7 +37,7 @@ describe("HTTP userSignIn", () => {
 
       expect(result.status).toBe(401);
       expect(result.data.token).not.toBeDefined();
-      expect(result.data.message).toMatch(/crendenciais invalidas/i);
+      expect(result.data.message).toMatch(/User not found/i);
       expect(result.data.name).toBe("InvalidCredentialsError");
     });
 
