@@ -6,4 +6,5 @@ export default interface UserRepository {
   findByEmail(email: string): Promise<User | undefined>;
   update(user: User): Promise<void>;
   delete(id: string): Promise<void>;
+  listUsers(): Promise<User[]>;
 }

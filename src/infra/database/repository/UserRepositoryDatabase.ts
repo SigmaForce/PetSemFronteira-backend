@@ -114,4 +114,32 @@ export default class UserRepositoryDatabase implements UserRepository {
       ]
     );
   }
+
+  async listUsers(): Promise<User[]> {
+    try {
+      const users = await this.databaseConnection.query(
+        `SELECT * FROM "users"`,
+        []
+      );
+
+      const usersMap = users.map((user: any) => ({
+        userId: user.id!,
+        nickName: user.nick_name,
+        email: user.email,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        birthDate: user.birthdate,
+        password: user.password_hash,
+        phone: user.phone,
+        role: user.role,
+        status: user.status,
+        description: user.description,
+        image_url: user.image_url,
+      }));
+
+      return usersMap;
+    } catch (error) {
+      throw new InternalServerError({ cause: error });
+    }
+  }
 }
